@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>微信对话生成器</title>
+    <link rel="shortcut icon" href="images/wechat_32.ico" /> 
+    <link rel="stylesheet" href="http://at.alicdn.com/t/font_1150525_bgd1keozarq.css">
+    <link rel="stylesheet" href="css/index.css">
+    <script src="https://code.jquery.com/jquery-3.4.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.8/vue.min.js"></script>
+</head>
+
+<body>
+    <div id="warp">
+        <div class="head">
+            <h1 class="title">微信对话生成器&nbsp;&nbsp;<span class="edition">V 0.1 Beta</span></h1>
+        </div>
+        <div class="main">
+            <div class="left">
+
+            </div>
+            <div class="center">
+                <h2 class="title">
+                    微信对话生成器
+                </h2>
+                <div class="setInfo">
+                    <input type="text" class="set_year time" placeholder="年" :value="time.year">年
+                    <input type="text" class="set_month time" placeholder="月" :value="time.month">月
+                    <input type="text" class="set_day time" placeholder="日" :value="time.day">日
+                    <input type="text" class="set_hour time" placeholder="时" :value="time.hour">时
+                    <input type="text" class="set_min time" placeholder="分" :value="time.min">分
+                    <button class="set time">插入时间</button>
+                </div>
+                <div class="user">
+                    <div class="gust">
+                        <h3 class="title">好友</h3>
+                        <ul class="gust_list" v-for="(item,index) in gust">
+                            <li class="gust_item">
+                                <div class="user_info gust_info">
+                                    <input type="file" class="uploadImg gust_upload_head">
+                                    <img :src="item.headImg" alt="" class="headImg gust_head">
+                                    <input type="text" class="userName gust_name" placeholder="昵称"
+                                        :value="item.userName">
+                                    <button class="set_userName set_Gustname">修改昵称</button>
+                                </div>
+                                <div class="sendText">
+                                    <input type="text" class="text gust_text" placeholder="消息内容">
+                                    <button class="send_text gust_send_text">发送文字消息</button>
+                                </div>
+                                <div class="sendImg">
+                                    <input type="file" class="uploadImg gust_upload_img">
+                                    <img :src="item.sendImg" alt="" class="msgImg gust_img">
+                                    <button class="send_img gust_send_img">发送图片</button>
+                                </div>
+                                <div class="sendVoice">
+                                    <input type="text" class="voice gust_voice" placeholder="语音时长">
+                                    <button class="send_voice gust_send_voice">发送语音消息</button>
+                                </div>
+                                <div class="sendMoney">
+                                    <input type="text" class="money gust_money" placeholder="转账金额">
+                                    <button class="send_money gust_send_money">转账</button>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="admin">
+                        <h3 class="title">自己</h3>
+                        <div class="user_info">
+                            <input type="file" class="uploadImg admin_upload_head">
+                            <img :src="admin.headImg" alt="" class="headImg admin_head">
+                            <input type="text" class="userName admin_name" placeholder="昵称" :value="admin.userName">
+                            <button class="set_userName setAdminName">修改昵称</button>
+                        </div>
+                        <div class="sendText">
+                            <input type="text" class="text admin_text" placeholder="消息内容">
+                            <button class="send_text admin_send_text">发送文字消息</button>
+                        </div>
+                        <div class="sendImg">
+                            <input type="file" class="uploadImg admin_upload_img">
+                            <img :src="admin.sendImg" alt="" class="msgImg admin_img">
+                            <button class="send_img admin_send_img">发送图片</button>
+                        </div>
+                        <div class="sendVoice">
+                            <input type="text" class="voice admin_voice" placeholder="语音时长">
+                            <button class="send_voice admin_send_voice">发送语音消息</button>
+                        </div>
+                        <div class="sendMoney">
+                            <input type="text" class="money admin_money" placeholder="转账金额">
+                            <button class="send_money admin_send_money">转账</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="phone">
+                    <div class="view_warp">
+                        <div class="view_top">
+                            <img class="phone_info" src="images/phone_info.jpg" alt="" srcset="">
+                            <div class="name">
+                                <div class="left">&lt;</div>
+                                <div class="num">3</div>
+                                <input class="name_info" type="text" :value="title">
+                                <div class="meun">···</div>
+                            </div>
+                        </div>
+                        <div class="view_main">
+                            <div class="ecth" v-for="(item,index) in msg">
+                                <div class="msg_time" v-if="item.type == 'time'">{{item.value}}</div>
+                                <div class="msg_text_right msg_right"
+                                    v-else-if="item.type == 'text' && item.align =='right'">
+                                    <img class="msg_head" :src="admin.headImg">
+                                    <i class="iconfont icon-you"></i>
+                                    <div class="msg_text">{{item.value}}</div>
+                                </div>
+                                <div class="msg_img_right msg_right"
+                                    v-else-if="item.type == 'img' && item.align =='right'">
+                                    <img class="msg_head" :src="admin.headImg" alt="" srcset="">
+                                    <img class="msg_img" :src="item.value">
+                                </div>
+                                <div class="msg_voice_right msg_right"
+                                    v-else-if="item.type == 'voice' && item.align =='right'">
+                                    <img class="msg_head" :src="admin.headImg" alt="" srcset="">
+                                    <i class="iconfont icon-you"></i>
+                                    <div class="msg_voice">{{item.value}}<i class="iconfont icon-yuyinyou"></i></div>
+                                </div>
+                                <div class="msg_sendMoney_right msg_right"
+                                    v-else-if="item.type == 'money' && item.align =='right'">
+                                    <img class="msg_head" :src="admin.headImg" alt="" srcset="">
+                                    <i class="iconfont icon-you"></i>
+                                    <div class="msg_sendMoney">
+                                        <div class="money_top">
+                                            <i class="iconfont icon-zhuanzhang"></i>
+                                            <div class="money_main">
+                                                <p class="money_amount">{{item.value}}</p>
+                                                <p class="money_user">{{item.user}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="money_bot">
+                                            微信转账
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="msg_text_left msg_left"
+                                    v-else-if="item.type == 'text' && item.align =='left'">
+                                    <img class="msg_head" :src="item.head" alt="" >
+                                    <i class="iconfont icon-zuofanye"></i>
+                                    <div class="msg_text">{{item.value}}</div>
+                                </div>
+                                <div class="msg_img_left msg_left"
+                                    v-else-if="item.type == 'img' && item.align =='left'">
+                                    <img class="msg_head" :src="item.head" alt="" >
+                                    <img class="msg_img" :src="item.value">
+                                </div>
+                                <div class="msg_voice_left msg_left"
+                                    v-else-if="item.type == 'voice' && item.align =='left'">
+                                    <img class="msg_head" :src="item.head" alt="" >
+                                    <i class="iconfont icon-zuofanye"></i>
+                                    <div class="msg_voice">{{item.value}}<i class="iconfont icon-yuyinzuo"></i></div>
+                                </div>
+                                <div class="msg_sendMoney_left msg_left"
+                                    v-else-if="item.type == 'money' && item.align =='left'">
+                                    <img class="msg_head" :src="item.head" alt="">
+                                    <i class="iconfont icon-zuofanye"></i>
+                                    <div class="msg_sendMoney">
+                                        <div class="money_top">
+                                            <i class="iconfont icon-zhuanzhang"></i>
+                                            <div class="money_main">
+                                                <p class="money_amount">{{item.value}}</p>
+                                                <p class="money_user">{{item.user}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="money_bot">
+                                            微信转账
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="view_bom">
+                            <img src="images/phone_bottom.jpg" alt="" srcset="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/index.js"></script>
+</body>
+
+</html>
